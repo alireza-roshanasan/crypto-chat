@@ -4,6 +4,7 @@ import sys
 from termcolor import colored
 from Crypto.Cipher import AES
 import base64
+import datetime
 secret_key = raw_input('type your key(16 or 24 or 32 character):')
 if len(secret_key) not in [16,24,32]:
     print colored('Your key must be 16 or 24 characters long','red')
@@ -29,7 +30,6 @@ if len(sys.argv) != 3:
 IP_address = str(sys.argv[1])
 Port = int(sys.argv[2])
 server.connect((IP_address, Port))
- 
 while True:
     sockets_list = [sys.stdin, server]
     read_sockets,write_socket, error_socket = select.select(sockets_list,[],[])
@@ -43,6 +43,8 @@ while True:
             print colored(message,'white')
         else:
             message = sys.stdin.readline()
+            time = datetime.datetime.now()
+            message = message +' ['+str(time.hour)+':'+str(time.minute)+']' 
             message = message.replace(' ','&')
             message = en_text(message)
             server.send(message)
