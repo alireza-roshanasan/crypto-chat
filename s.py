@@ -2,6 +2,7 @@ import socket
 import select
 import sys
 from thread import *
+clients_co = input('how many people can enter this conversation?(enter 2 for two-person conversation):') 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 if len(sys.argv) != 3:
@@ -10,7 +11,7 @@ if len(sys.argv) != 3:
 IP_address = str(sys.argv[1])
 Port = int(sys.argv[2])
 server.bind((IP_address, Port))
-server.listen(2)
+server.listen(clients_co)
 list_of_clients = []
 def clientthread(conn, addr):
     while True:
