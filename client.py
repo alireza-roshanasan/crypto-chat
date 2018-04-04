@@ -19,14 +19,9 @@ def en_text(y):
     decoded = cipher.decrypt(base64.b64decode(encoded))
     return encoded
 def de_text(y):
-    rj = len(y)
-    while rj%16!=0:
-            rj += 1
-    msg_text = y.rjust(rj) 
     cipher = AES.new(secret_key,AES.MODE_ECB)
     decoded = cipher.decrypt(base64.b64decode(y))
     return decoded
-
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 if len(sys.argv) != 3:
     print "Correct usage: script, IP address, port number"
@@ -43,12 +38,12 @@ while True:
             message = socks.recv(2048)
             message_s = message.split('^')
             message = message_s[1]
-            message = message_s[0] + de_text(message).replace('\n','').replace(' ','').replace('&',' ')
+            time = datetime.datetime.now()
+            message = message_s[0] + de_text(message).replace('\n','').replace(' ','').replace('&',' ')+' ['+str(time.hour)+':'+str(time.minute)+']'
             print colored(message,'white')
         else:
             message = sys.stdin.readline()
-            time = datetime.datetime.now()
-            message = message +' ['+str(time.hour)+':'+str(time.minute)+']' 
+            message = message  
             message = message.replace(' ','&')
             message = en_text(message)
             server.send(message)
