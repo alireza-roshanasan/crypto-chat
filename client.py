@@ -10,15 +10,19 @@ if len(secret_key) not in [16,24,32]:
     print colored('Your key must be 16 or 24 characters long','red')
     secret_key = raw_input('type your key(16 or 24 or 32 or 32 character):')
 def en_text(y):
-    msg_text = y.rjust(320)
-    # secret_key = '1234567890123456' 
+    rj = len(y)
+    while rj%16!=0:
+            rj += 1
+    msg_text = y.rjust(rj)
     cipher = AES.new(secret_key,AES.MODE_ECB) 
     encoded = base64.b64encode(cipher.encrypt(msg_text))
     decoded = cipher.decrypt(base64.b64decode(encoded))
     return encoded
 def de_text(y):
-    msg_text = y.rjust(320)
-    # secret_key = '1234567890123456' 
+    rj = len(y)
+    while rj%16!=0:
+            rj += 1
+    msg_text = y.rjust(rj) 
     cipher = AES.new(secret_key,AES.MODE_ECB)
     decoded = cipher.decrypt(base64.b64decode(y))
     return decoded
@@ -37,9 +41,9 @@ while True:
     for socks in read_sockets:
         if socks == server:
             message = socks.recv(2048)
-            message_s = message.split('#')
+            message_s = message.split('^')
             message = message_s[1]
-            message = message_s[0] +  de_text(message).replace('\n','').replace(' ','').replace('&',' ')
+            message = message_s[0] + de_text(message).replace('\n','').replace(' ','').replace('&',' ')
             print colored(message,'white')
         else:
             message = sys.stdin.readline()

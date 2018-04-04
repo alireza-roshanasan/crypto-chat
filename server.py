@@ -18,8 +18,8 @@ def clientthread(conn, addr):
             try:
                 message = conn.recv(2048)
                 if message:
-                    print "<" + addr[0] + ">#" + message
-                    message_to_send = "<" + addr[0] + ">#" + message
+                    print "<" + addr[0] + ">" + message
+                    message_to_send = "<" + addr[0] + ">^" + message
                     broadcast(message_to_send, conn)
                 else:
                     remove(conn)
